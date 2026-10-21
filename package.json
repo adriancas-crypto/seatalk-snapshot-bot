@@ -4,11 +4,11 @@
   "description": "Node.js microservice for rendering HTML snapshot to SeaTalk image",
   "main": "server.js",
   "scripts": {
-    "postinstall": "npx playwright install chromium",
+    "postinstall": "PLAYWRIGHT_BROWSERS_PATH=0 npx playwright install chromium",
     "start": "node server.js"
   },
   "dependencies": {
     "express": "^4.18.2",
-    "playwright": "^1.40.0"
+    "playwright-chromium": "^1.40.0"
   }
 }
