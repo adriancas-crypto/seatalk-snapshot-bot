@@ -1,0 +1,1 @@
+# seatalk-snapshot-bot
