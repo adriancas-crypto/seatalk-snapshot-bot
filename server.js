@@ -1,5 +1,5 @@
 const express = require('express');
-const { chromium } = require('playwright');
+const { chromium } = require('playwright-chromium');
 const app = express();
 
 app.use(express.json());
