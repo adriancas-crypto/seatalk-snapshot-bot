@@ -1,8 +1,10 @@
 {
   "name": "seatalk-snapshot-bot",
   "version": "1.0.0",
+  "description": "Node.js microservice for rendering HTML snapshot to SeaTalk image",
   "main": "server.js",
   "scripts": {
+    "postinstall": "npx playwright install chromium --with-deps",
     "start": "node server.js"
   },
   "dependencies": {
