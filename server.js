@@ -4,6 +4,7 @@ const app = express();
 
 app.use(express.json());
 
+// Endpoint para sa snapshot generation
 app.post('/generate-snapshot', async (req, res) => {
   const { html, appId, appSecret, groupId } = req.body;
 
@@ -13,16 +14,16 @@ app.post('/generate-snapshot', async (req, res) => {
 
   let browser;
   try {
-    // 1. Launch Headless Chrome Browser
+    // 1. Launch Headless Browser
     browser = await chromium.launch();
     const page = await browser.newPage();
     await page.setContent(html, { waitUntil: 'networkidle' });
 
-    // 2. Take Screenshot of HTML Table
+    // 2. Take Screenshot ng HTML Table
     const imageBuffer = await page.screenshot({ type: 'png', fullPage: true });
     await browser.close();
 
-    // 3. Get SeaTalk Token
+    // 3. Get SeaTalk Access Token (V2 Endpoint)
     const tokenRes = await fetch('https://openapi.seatalk.io/auth/v2/token', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -35,10 +36,10 @@ app.post('/generate-snapshot', async (req, res) => {
       return res.status(500).json({ error: 'Failed to get SeaTalk Token', details: tokenData });
     }
 
-    // 4. Upload Image Blob to SeaTalk Media
+    // 4. Upload Image sa SeaTalk Media Storage
     const formData = new FormData();
     const blob = new Blob([imageBuffer], { type: 'image/png' });
-    formData.append('image', blob, 'schedule.png');
+    formData.append('image', blob, 'tm_pending.png');
 
     const uploadRes = await fetch('https://openapi.seatalk.io/media/v1/upload_image', {
       method: 'POST',
@@ -52,7 +53,7 @@ app.post('/generate-snapshot', async (req, res) => {
       return res.status(500).json({ error: 'Failed to upload image to SeaTalk', details: uploadData });
     }
 
-    // 5. Send Image to Group Chat
+    // 5. Send Image sa SeaTalk Group Chat
     const sendRes = await fetch('https://openapi.seatalk.io/messaging/v1/group_chat/send', {
       method: 'POST',
       headers: {
