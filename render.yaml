@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: seatalk-snapshot-bot
+    env: node
+    buildCommand: npm install && npx playwright install chromium --with-deps
+    startCommand: npm start
+    envVars:
+      - key: PLAYWRIGHT_BROWSERS_PATH
+        value: "0"
